@@ -15,9 +15,9 @@
   --soot-2: #231c17;
   --engine: #b5121b;
   --engine-hi: #e2372c;
-  --brass: #d4a94f;
-  --leaf-hi: #f8e09a;
-  --leaf-lo: #94712a;
+  --brass: #f9be04;      /* gold sampled from the HFD monogram */
+  --leaf-hi: #ffd84d;
+  --leaf-lo: #a67c00;
   --smoke: #f2ebe0;
   --ash: #a89d8e;
   --ember: #ff8a3d;
@@ -133,8 +133,7 @@ button { font: inherit; color: inherit; }
 .leaf {
   font-family: var(--f-display); font-weight: 400; line-height: 0.98;
   margin: 0; text-wrap: balance;
-  background: linear-gradient(180deg, var(--leaf-hi) 0%, var(--brass) 48%, var(--leaf-lo) 52%, var(--brass) 100%);
-  -webkit-background-clip: text; background-clip: text; color: transparent;
+  color: var(--brass);
   filter: drop-shadow(2px 3px 0 rgba(0, 0, 0, 0.65));
 }
 .leaf.xl { font-size: clamp(2.6rem, 8vw, 6.4rem); }
@@ -182,7 +181,7 @@ button { font: inherit; color: inherit; }
 .controls { display: flex; gap: 8px; transition: opacity 0.6s ease; }
 .btn {
   width: 44px; height: 44px; display: grid; place-items: center;
-  border: 1px solid rgba(212, 169, 79, 0.55); background: rgba(21, 17, 14, 0.55);
+  border: 1px solid rgba(249, 190, 4, 0.55); background: rgba(21, 17, 14, 0.55);
   cursor: pointer; transition: background 0.2s, border-color 0.2s;
 }
 .btn:hover { background: var(--engine); border-color: var(--engine-hi); }

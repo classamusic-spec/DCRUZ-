@@ -1,0 +1,521 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>D. Cruz Retirement</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Alfa+Slab+One&family=Barlow+Condensed:wght@500;600;700&family=Barlow:wght@400;500&display=swap">
+<style>
+/* Layout: full-bleed photo stage over a blurred, ember-lit backdrop; the
+   header and footer read like the gold-leaf lettering on an apparatus door. */
+:root {
+  --soot: #15110e;
+  --soot-2: #231c17;
+  --engine: #b5121b;
+  --engine-hi: #e2372c;
+  --brass: #d4a94f;
+  --leaf-hi: #f8e09a;
+  --leaf-lo: #94712a;
+  --smoke: #f2ebe0;
+  --ash: #a89d8e;
+  --ember: #ff8a3d;
+  --scrim: rgba(15, 11, 9, 0.72);
+
+  --f-display: "Alfa Slab One", Rockwell, "Roboto Slab", Georgia, serif;
+  --f-label: "Barlow Condensed", "Arial Narrow", "Helvetica Neue", sans-serif;
+  --f-body: "Barlow", system-ui, -apple-system, "Segoe UI", sans-serif;
+
+  --gutter: clamp(16px, 3vw, 36px);
+  --dur: 6500ms;
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+html, body { height: 100%; margin: 0; }
+body {
+  background: var(--soot);
+  color: var(--smoke);
+  font-family: var(--f-body);
+  font-size: 16px;
+  overflow: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+button { font: inherit; color: inherit; }
+
+/* ---------- Backdrop ---------- */
+.backdrops, #embers { position: fixed; inset: 0; pointer-events: none; }
+.backdrops { z-index: 0; background: var(--soot); }
+.backdrop {
+  position: absolute; inset: -40px;
+  background-size: cover; background-position: center;
+  filter: blur(32px) saturate(1.1) brightness(0.5);
+  opacity: 0; transition: opacity 1.4s ease;
+}
+.backdrop.on { opacity: 1; }
+.backdrops::after {
+  content: ""; position: absolute; inset: 0;
+  background:
+    radial-gradient(ellipse at 50% 120%, rgba(181, 18, 27, 0.35), transparent 60%),
+    radial-gradient(ellipse at center, transparent 30%, var(--scrim) 100%);
+}
+#embers { z-index: 1; }
+
+/* ---------- App frame ---------- */
+.app {
+  position: fixed; inset: 0; z-index: 2;
+  display: grid; grid-template-rows: auto minmax(0, 1fr) auto;
+}
+
+.top {
+  display: flex; align-items: center; justify-content: space-between; gap: 16px;
+  padding: calc(12px + env(safe-area-inset-top, 0px)) var(--gutter) 12px;
+  background: linear-gradient(to bottom, var(--scrim), transparent);
+  transition: opacity 0.6s ease;
+}
+.dept { display: flex; align-items: center; gap: 12px; min-width: 0; }
+.dept svg { width: 40px; height: 40px; flex: none; }
+.dept-text { min-width: 0; line-height: 1.1; }
+.dept-name {
+  font-family: var(--f-label); font-weight: 700; font-size: 1.05rem;
+  letter-spacing: 0.14em; text-transform: uppercase; color: var(--brass);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.dept-sub {
+  font-family: var(--f-label); font-weight: 500; font-size: 0.85rem;
+  letter-spacing: 0.1em; text-transform: uppercase; color: var(--ash);
+}
+.counter {
+  font-family: var(--f-label); font-weight: 600; font-size: 0.95rem;
+  letter-spacing: 0.08em; color: var(--ash); font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+/* ---------- Stage ---------- */
+.stage { position: relative; min-height: 0; margin-inline: var(--gutter); container-type: size; }
+.slide {
+  position: absolute; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0; visibility: hidden;
+  transition: opacity 1.2s ease, visibility 0s linear 1.2s;
+}
+.slide.on { opacity: 1; visibility: visible; transition: opacity 1.2s ease, visibility 0s; }
+.frame {
+  position: relative; max-width: 100%; max-height: 100%;
+  display: flex; overflow: hidden;
+  border: 3px solid var(--brass);
+  outline: 1px solid var(--leaf-lo); outline-offset: 4px;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.6);
+}
+.frame img {
+  /* Scale up to fill the stage; --ar is set from each photo's real shape. */
+  display: block; height: auto;
+  width: min(calc(100cqw - 16px), calc((100cqh - 20px) * var(--ar, 0.75)));
+  transform-origin: var(--origin, center);
+}
+.slide.on .frame img { animation: kenburns 9s ease-out forwards; }
+@keyframes kenburns { from { transform: scale(1); } to { transform: scale(1.07); } }
+
+/* ---------- Title + closing cards ---------- */
+.card {
+  display: grid; grid-template-columns: auto minmax(0, 1fr);
+  align-items: center; gap: clamp(20px, 4vw, 56px);
+  max-width: 1000px; width: 100%;
+}
+.card .emblem { width: clamp(120px, 20vw, 240px); height: auto; filter: drop-shadow(0 10px 30px rgba(0,0,0,0.6)); }
+.card-text { min-width: 0; }
+.eyebrow {
+  font-family: var(--f-label); font-weight: 600; text-transform: uppercase;
+  letter-spacing: 0.22em; font-size: clamp(0.8rem, 1.4vw, 1rem); color: var(--engine-hi);
+  margin: 0 0 12px;
+}
+.leaf {
+  font-family: var(--f-display); font-weight: 400; line-height: 0.98;
+  margin: 0; text-wrap: balance;
+  background: linear-gradient(180deg, var(--leaf-hi) 0%, var(--brass) 48%, var(--leaf-lo) 52%, var(--brass) 100%);
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+  filter: drop-shadow(2px 3px 0 rgba(0, 0, 0, 0.65));
+}
+.leaf.xl { font-size: clamp(2.6rem, 8vw, 6.4rem); }
+.leaf.lg { font-size: clamp(2.2rem, 6.4vw, 5rem); }
+.honoree {
+  font-family: var(--f-label); font-weight: 700; text-transform: uppercase;
+  font-size: clamp(1.6rem, 4.4vw, 3.2rem); letter-spacing: 0.06em;
+  margin: 14px 0 0; color: var(--smoke);
+  display: flex; align-items: center; gap: 14px;
+}
+.honoree::before {
+  content: ""; flex: none; width: clamp(28px, 5vw, 56px); height: 4px; background: var(--engine);
+}
+.card p.note {
+  font-size: clamp(1rem, 1.8vw, 1.25rem); line-height: 1.5; color: var(--ash);
+  max-width: 48ch; margin: 18px 0 0;
+}
+
+/* ---------- Footer ---------- */
+.bottom {
+  display: grid; gap: 12px;
+  padding: 14px var(--gutter) calc(14px + env(safe-area-inset-bottom, 0px));
+  background: linear-gradient(to top, var(--scrim) 40%, transparent);
+}
+.progress { height: 4px; background: rgba(242, 235, 224, 0.12); overflow: hidden; }
+.progress i {
+  display: block; height: 100%; width: 100%; background: var(--engine-hi);
+  transform-origin: left; transform: scaleX(0);
+}
+.progress i.run { animation: fill var(--dur) linear forwards; }
+.paused .progress i.run { animation-play-state: paused; }
+@keyframes fill { to { transform: scaleX(1); } }
+
+.row { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+.caption { min-width: 0; flex: 1 1 280px; min-height: 3.1em; }
+.caption .chapter {
+  font-family: var(--f-label); font-weight: 600; text-transform: uppercase;
+  letter-spacing: 0.2em; font-size: 0.85rem; color: var(--brass);
+}
+.caption .line {
+  font-family: var(--f-label); font-weight: 600; font-size: clamp(1.25rem, 2.6vw, 1.9rem);
+  line-height: 1.15; color: var(--smoke); margin-top: 2px;
+}
+
+.controls { display: flex; gap: 8px; transition: opacity 0.6s ease; }
+.btn {
+  width: 44px; height: 44px; display: grid; place-items: center;
+  border: 1px solid rgba(212, 169, 79, 0.55); background: rgba(21, 17, 14, 0.55);
+  cursor: pointer; transition: background 0.2s, border-color 0.2s;
+}
+.btn:hover { background: var(--engine); border-color: var(--engine-hi); }
+.btn:focus-visible, .thumb:focus-visible { outline: 2px solid var(--leaf-hi); outline-offset: 2px; }
+.btn svg { width: 20px; height: 20px; fill: currentColor; }
+.btn.play { background: var(--engine); border-color: var(--engine-hi); }
+
+.thumbs {
+  display: flex; gap: 8px; overflow-x: auto; padding: 2px 2px 4px;
+  scrollbar-width: thin; transition: opacity 0.6s ease;
+}
+.thumb {
+  flex: none; width: 64px; height: 44px; padding: 0; cursor: pointer;
+  border: 2px solid transparent; background: var(--soot-2); opacity: 0.55;
+  transition: opacity 0.2s, border-color 0.2s;
+}
+.thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.thumb:hover { opacity: 0.9; }
+.thumb.on { opacity: 1; border-color: var(--brass); }
+.thumb.text {
+  font-family: var(--f-label); font-weight: 700; font-size: 0.7rem; letter-spacing: 0.1em;
+  text-transform: uppercase; color: var(--brass);
+}
+
+/* Hide the chrome while the show runs untouched (projector mode). */
+.idle .top, .idle .controls, .idle .thumbs { opacity: 0; }
+.idle { cursor: none; }
+
+@media (max-width: 600px) {
+  .card { grid-template-columns: 1fr; justify-items: start; }
+  .card .emblem { width: 96px; }
+  .counter { display: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .slide.on .frame img { animation: none; }
+  .slide, .slide.on, .backdrop { transition-duration: 0.01s; }
+}
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <linearGradient id="gold" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#f8e09a"/>
+      <stop offset="0.5" stop-color="#d4a94f"/>
+      <stop offset="1" stop-color="#94712a"/>
+    </linearGradient>
+    <!-- One flared, notched arm of the Maltese cross; rotated four times. -->
+    <path id="arm" d="M43 41 L30 5 Q50 13 50 17 Q50 13 70 5 L57 41 Z"/>
+    <g id="cross">
+      <g fill="url(#gold)" stroke="#5c4418" stroke-width="1.2" stroke-linejoin="round">
+        <use href="#arm"/>
+        <use href="#arm" transform="rotate(90 50 50)"/>
+        <use href="#arm" transform="rotate(180 50 50)"/>
+        <use href="#arm" transform="rotate(270 50 50)"/>
+      </g>
+      <circle cx="50" cy="50" r="17" fill="#b5121b" stroke="url(#gold)" stroke-width="3"/>
+      <text x="50" y="55.5" text-anchor="middle" font-family="Alfa Slab One, Georgia, serif" font-size="13" fill="#f8e09a">HFD</text>
+    </g>
+  </defs>
+</svg>
+
+<div class="backdrops" id="backdrops"></div>
+<canvas id="embers" aria-hidden="true"></canvas>
+
+<div class="app" id="app">
+  <header class="top">
+    <div class="dept">
+      <svg viewBox="0 0 100 100" role="img" aria-label="Maltese cross"><use href="#cross"/></svg>
+      <div class="dept-text">
+        <div class="dept-name">Hartford Fire Department</div>
+        <div class="dept-sub">Class 1 · Hartford, Connecticut</div>
+      </div>
+    </div>
+    <div class="counter" id="counter" aria-live="polite"></div>
+  </header>
+
+  <main class="stage" id="stage" aria-roledescription="slideshow"></main>
+
+  <footer class="bottom">
+    <div class="progress" aria-hidden="true"><i id="bar"></i></div>
+    <div class="row">
+      <div class="caption" id="caption">
+        <div class="chapter" id="chapter"></div>
+        <div class="line" id="line"></div>
+      </div>
+      <div class="controls">
+        <button class="btn" id="prev" type="button" aria-label="Previous photo">
+          <svg viewBox="0 0 24 24"><path d="M15.5 4 7.5 12l8 8 1.4-1.4L10.3 12l6.6-6.6z"/></svg>
+        </button>
+        <button class="btn play" id="play" type="button" aria-label="Pause slideshow">
+          <svg viewBox="0 0 24 24" id="play-icon"><path d="M7 5h3.5v14H7zM13.5 5H17v14h-3.5z"/></svg>
+        </button>
+        <button class="btn" id="next" type="button" aria-label="Next photo">
+          <svg viewBox="0 0 24 24"><path d="M8.5 4 7.1 5.4 13.7 12l-6.6 6.6L8.5 20l8-8z"/></svg>
+        </button>
+        <button class="btn" id="full" type="button" aria-label="Full screen">
+          <svg viewBox="0 0 24 24"><path d="M4 4h6v2H6v4H4zM14 4h6v6h-2V6h-4zM4 14h2v4h4v2H4zM18 14h2v6h-6v-2h4z"/></svg>
+        </button>
+      </div>
+    </div>
+    <nav class="thumbs" id="thumbs" aria-label="Jump to a photo"></nav>
+  </footer>
+</div>
+
+<script>
+/* ================================================================
+   EDIT HERE: name, messages, and photo captions.
+   Photos are shown in this order. To add a photo, upload it to the
+   "DCRUZ PHOTOS" folder and add a line below with its file name.
+   ================================================================ */
+const HONOREE = "D. Cruz";
+const OPENING = {
+  eyebrow: "Hartford Fire Department",
+  title: "Happy Retirement",
+  note: "Thank you for your years of service to the City of Hartford. Enjoy a look back at the job, the crew, and the good times."
+};
+const CLOSING = {
+  eyebrow: "Congratulations, " + HONOREE,
+  title: "Your shift is over. We've got it from here.",
+  note: "From your brothers and sisters of the Hartford Fire Department. Stay safe and enjoy every day of retirement."
+};
+const PHOTO_FOLDER = "DCRUZ PHOTOS/";
+const PHOTOS = [
+  { file: "IMG_2414.jpeg", chapter: "The early days",  caption: "Engine 2. Earned every smudge." },
+  { file: "IMG_2415.jpeg", chapter: "The early days",  caption: "Hartford. Class 1 Fire Department." },
+  { file: "IMG_0348.jpeg", chapter: "On the job",      caption: "Never afraid to climb up and get it done." },
+  { file: "IMG_1624.jpeg", chapter: "On the job",      caption: "Always building something." },
+  { file: "IMG_0310.jpeg", chapter: "On the job",      caption: "Always ready with a story." },
+  { file: "IMG_8637.jpeg", chapter: "The crew",        caption: "Walking with the crew." },
+  { file: "IMG_8935.jpeg", chapter: "The crew",        caption: "Smiles all around." },
+  { file: "IMG_0583.jpeg", chapter: "Around Hartford", caption: "Watching the city grow." },
+  { file: "IMG_0586.jpeg", chapter: "Around Hartford", caption: "Proud of this city." },
+  { file: "IMG_1647.jpeg", chapter: "Around Hartford", caption: "Looking sharp in the whites." },
+  { file: "IMG_0600.jpeg", chapter: "Off the clock",   caption: "Coffee break, well earned." },
+  { file: "IMG_0077.jpeg", chapter: "Off the clock",   caption: "Never missed a meal with the crew." },
+  { file: "IMG_0076.jpeg", chapter: "What's next",     caption: "Retirement mode: on." },
+  { file: "IMG_0075.jpeg", chapter: "What's next",     caption: "Next stop: the rocking chair." }
+];
+const SECONDS_PER_PHOTO = 6.5;
+const SECONDS_PER_TITLE = 9;
+/* ================================================================ */
+
+const $ = (id) => document.getElementById(id);
+const app = $("app"), stage = $("stage"), thumbs = $("thumbs"), backdrops = $("backdrops");
+const bar = $("bar");
+const src = (f) => encodeURI(PHOTO_FOLDER + f);
+const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+const origins = ["center", "30% 30%", "70% 40%", "40% 70%", "60% 25%"];
+
+const slides = [
+  { kind: "title", ...OPENING },
+  ...PHOTOS.map((p) => ({ kind: "photo", ...p })),
+  { kind: "title", ...CLOSING, closing: true }
+];
+
+function cardHTML(s) {
+  return `<div class="card">
+    <svg class="emblem" viewBox="0 0 100 100" aria-hidden="true"><use href="#cross"/></svg>
+    <div class="card-text">
+      <p class="eyebrow">${esc(s.eyebrow)}</p>
+      <h1 class="leaf ${s.closing ? "lg" : "xl"}">${esc(s.title)}</h1>
+      ${s.closing ? "" : `<p class="honoree">${esc(HONOREE)}</p>`}
+      <p class="note">${esc(s.note)}</p>
+    </div>
+  </div>`;
+}
+
+slides.forEach((s, i) => {
+  const el = document.createElement("section");
+  el.className = "slide";
+  el.setAttribute("aria-roledescription", "slide");
+  el.setAttribute("aria-label", `${i + 1} of ${slides.length}`);
+  if (s.kind === "photo") {
+    el.innerHTML = `<div class="frame"><img src="${src(s.file)}" alt="${esc(s.caption)}" decoding="async"></div>`;
+    const img = el.querySelector("img");
+    img.style.setProperty("--origin", origins[i % origins.length]);
+    const setAr = () => img.naturalWidth && img.style.setProperty("--ar", img.naturalWidth / img.naturalHeight);
+    img.complete ? setAr() : img.addEventListener("load", setAr);
+  } else {
+    el.innerHTML = cardHTML(s);
+  }
+  stage.appendChild(el);
+  s.el = el;
+
+  const bd = document.createElement("div");
+  bd.className = "backdrop";
+  if (s.kind === "photo") bd.style.backgroundImage = `url("${src(s.file)}")`;
+  backdrops.appendChild(bd);
+  s.bd = bd;
+
+  const t = document.createElement("button");
+  t.type = "button";
+  t.className = "thumb" + (s.kind === "photo" ? "" : " text");
+  t.setAttribute("aria-label", s.kind === "photo" ? `Photo: ${s.caption}` : (s.closing ? "Closing message" : "Opening title"));
+  t.innerHTML = s.kind === "photo" ? `<img src="${src(s.file)}" alt="" loading="lazy">` : (s.closing ? "End" : "Start");
+  t.addEventListener("click", () => go(i));
+  thumbs.appendChild(t);
+  s.thumb = t;
+});
+
+let cur = -1;
+let playing = true;
+
+function go(i) {
+  i = (i + slides.length) % slides.length;
+  if (cur >= 0) {
+    const old = slides[cur];
+    old.el.classList.remove("on"); old.bd.classList.remove("on"); old.thumb.classList.remove("on");
+    old.thumb.removeAttribute("aria-current");
+  }
+  cur = i;
+  const s = slides[i];
+  s.el.classList.add("on"); s.bd.classList.add("on"); s.thumb.classList.add("on");
+  s.thumb.setAttribute("aria-current", "true");
+  s.thumb.scrollIntoView({ block: "nearest", inline: "center", behavior: "smooth" });
+
+  // Restart the Ken Burns zoom on revisit.
+  const img = s.el.querySelector(".frame img");
+  if (img) { img.style.animation = "none"; void img.offsetWidth; img.style.animation = ""; }
+
+  $("chapter").textContent = s.kind === "photo" ? s.chapter : "";
+  $("line").textContent = s.kind === "photo" ? s.caption : "";
+  $("counter").textContent = s.kind === "photo"
+    ? `Photo ${slides.indexOf(s)} of ${PHOTOS.length}`
+    : (s.closing ? "Thank you" : "Welcome");
+
+  const secs = s.kind === "photo" ? SECONDS_PER_PHOTO : SECONDS_PER_TITLE;
+  document.documentElement.style.setProperty("--dur", secs * 1000 + "ms");
+  bar.classList.remove("run"); void bar.offsetWidth; bar.classList.add("run");
+}
+
+bar.addEventListener("animationend", () => { if (playing) go(cur + 1); });
+
+function setPlaying(p) {
+  playing = p;
+  app.classList.toggle("paused", !p);
+  $("play").setAttribute("aria-label", p ? "Pause slideshow" : "Play slideshow");
+  $("play-icon").innerHTML = p
+    ? '<path d="M7 5h3.5v14H7zM13.5 5H17v14h-3.5z"/>'
+    : '<path d="M8 5v14l11-7z"/>';
+  if (p) wake(); else release();
+  poke();
+}
+
+$("prev").addEventListener("click", () => { go(cur - 1); poke(); });
+$("next").addEventListener("click", () => { go(cur + 1); poke(); });
+$("play").addEventListener("click", () => setPlaying(!playing));
+$("full").addEventListener("click", toggleFull);
+
+function toggleFull() {
+  try {
+    if (document.fullscreenElement) document.exitFullscreen();
+    else document.documentElement.requestFullscreen().catch(() => {});
+  } catch (e) { /* fullscreen not available here */ }
+}
+
+document.addEventListener("keydown", (e) => {
+  if (e.key === "ArrowRight") { go(cur + 1); poke(); }
+  else if (e.key === "ArrowLeft") { go(cur - 1); poke(); }
+  else if (e.key === " " && !(e.target instanceof HTMLButtonElement)) { e.preventDefault(); setPlaying(!playing); }
+  else if (e.key === "f" || e.key === "F") toggleFull();
+  else if (e.key === "Home") go(0);
+  else if (e.key === "End") go(slides.length - 1);
+});
+
+// Swipe on phones and tablets.
+let sx = null;
+stage.addEventListener("touchstart", (e) => { sx = e.touches[0].clientX; }, { passive: true });
+stage.addEventListener("touchend", (e) => {
+  if (sx === null) return;
+  const dx = e.changedTouches[0].clientX - sx;
+  if (Math.abs(dx) > 40) go(cur + (dx < 0 ? 1 : -1));
+  sx = null; poke();
+});
+
+// Fade the controls after a few seconds without mouse movement.
+let idleTimer;
+function poke() {
+  app.classList.remove("idle"); document.body.classList.remove("idle");
+  clearTimeout(idleTimer);
+  idleTimer = setTimeout(() => {
+    if (playing) { app.classList.add("idle"); document.body.classList.add("idle"); }
+  }, 3500);
+}
+["mousemove", "pointerdown", "keydown"].forEach((ev) => document.addEventListener(ev, poke, { passive: true }));
+
+// Keep the screen awake while the show plays (ignored where unsupported).
+let lock = null;
+async function wake() { try { lock = await navigator.wakeLock?.request("screen"); } catch (e) { lock = null; } }
+function release() { try { lock?.release(); } catch (e) {} lock = null; }
+document.addEventListener("visibilitychange", () => { if (document.visibilityState === "visible" && playing) wake(); });
+
+/* ---------- Embers ---------- */
+(function embers() {
+  const cv = $("embers"), ctx = cv.getContext("2d");
+  const still = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  let w, h, dpr, parts = [];
+  function size() {
+    dpr = Math.min(window.devicePixelRatio || 1, 2);
+    w = cv.width = innerWidth * dpr; h = cv.height = innerHeight * dpr;
+    cv.style.width = innerWidth + "px"; cv.style.height = innerHeight + "px";
+  }
+  function spawn(y) {
+    return { x: Math.random() * w, y: y ?? h + Math.random() * 40, r: (0.6 + Math.random() * 1.8) * dpr,
+      vy: (0.25 + Math.random() * 0.7) * dpr, vx: (Math.random() - 0.5) * 0.3 * dpr,
+      life: 0.35 + Math.random() * 0.5, ph: Math.random() * 6.28 };
+  }
+  size(); addEventListener("resize", size);
+  const n = Math.round(Math.min(50, innerWidth / 30));
+  for (let i = 0; i < n; i++) parts.push(spawn(Math.random() * h));
+  function draw() {
+    ctx.clearRect(0, 0, w, h);
+    for (const p of parts) {
+      if (!still) {
+        p.y -= p.vy; p.ph += 0.02; p.x += p.vx + Math.sin(p.ph) * 0.25 * dpr;
+        if (p.y < -10) Object.assign(p, spawn());
+      }
+      const a = p.life * Math.min(1, p.y / h + 0.15);
+      ctx.beginPath();
+      ctx.fillStyle = `rgba(255, 138, 61, ${a})`;
+      ctx.shadowColor = "rgba(255, 90, 30, 0.9)"; ctx.shadowBlur = 8 * dpr;
+      ctx.arc(p.x, p.y, p.r, 0, 6.283); ctx.fill();
+    }
+    if (!still) requestAnimationFrame(draw);
+  }
+  draw();
+})();
+
+go(0);
+setPlaying(true);
+</script>
+</body>
+</html>

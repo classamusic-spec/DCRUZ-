@@ -1,6 +1,6 @@
-# D. Cruz Retirement Slideshow
+# Lt. Danny Cruz Retirement Slideshow
 
-A Hartford Fire Department themed slideshow celebrating D. Cruz's retirement.
+A Hartford Fire Department themed slideshow celebrating Lt. Danny Cruz's retirement.
 Open `index.html` in a browser, or view the deployed site.
 
 ## Using it at the party

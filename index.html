@@ -126,14 +126,14 @@ button { font: inherit; color: inherit; }
 .card {
   display: grid; grid-template-columns: auto minmax(0, 1fr);
   align-items: center; gap: clamp(20px, 4vw, 56px);
-  max-width: 1000px; width: 100%;
+  max-width: 1500px; width: 100%;
 }
-.card .emblem { width: clamp(120px, 20vw, 240px); height: auto; filter: drop-shadow(0 10px 30px rgba(0,0,0,0.6)); }
+.card .emblem { width: clamp(140px, min(30cqw, 56cqh), 420px); height: auto; filter: drop-shadow(0 10px 30px rgba(0,0,0,0.6)); }
 .card-text, .caption, .top { text-shadow: 0 1px 3px rgba(0, 0, 0, 0.9), 0 0 18px rgba(0, 0, 0, 0.75); }
 .card-text { min-width: 0; }
 .eyebrow {
   font-family: var(--f-label); font-weight: 600; text-transform: uppercase;
-  letter-spacing: 0.22em; font-size: clamp(0.8rem, 1.4vw, 1rem); color: var(--engine-hi);
+  letter-spacing: 0.22em; font-size: clamp(0.85rem, min(1.6cqw, 2.6cqh), 1.35rem); color: var(--engine-hi);
   margin: 0 0 12px;
 }
 .leaf {
@@ -142,11 +142,11 @@ button { font: inherit; color: inherit; }
   color: var(--brass);
   filter: drop-shadow(2px 3px 0 rgba(0, 0, 0, 0.65)) drop-shadow(0 0 18px rgba(0, 0, 0, 0.55));
 }
-.leaf.xl { font-size: clamp(2.6rem, 8vw, 6.4rem); }
-.leaf.lg { font-size: clamp(2.2rem, 6.4vw, 5rem); }
+.leaf.xl { font-size: clamp(2.8rem, min(11.5cqw, 18cqh), 10.5rem); }
+.leaf.lg { font-size: clamp(2.4rem, min(8.4cqw, 12.5cqh), 7.8rem); }
 .honoree {
   font-family: var(--f-label); font-weight: 700; text-transform: uppercase;
-  font-size: clamp(1.6rem, 4.4vw, 3.2rem); letter-spacing: 0.06em;
+  font-size: clamp(1.7rem, min(5cqw, 7.5cqh), 4.4rem); letter-spacing: 0.06em;
   margin: 14px 0 0; color: var(--smoke);
   display: flex; align-items: center; gap: 14px;
 }
@@ -154,7 +154,7 @@ button { font: inherit; color: inherit; }
   content: ""; flex: none; width: clamp(28px, 5vw, 56px); height: 4px; background: var(--engine);
 }
 .card p.note {
-  font-size: clamp(1rem, 1.8vw, 1.25rem); line-height: 1.5; color: var(--ash);
+  font-size: clamp(1rem, min(1.9cqw, 3cqh), 1.6rem); line-height: 1.5; color: var(--ash);
   max-width: 48ch; margin: 18px 0 0;
 }
 
@@ -341,7 +341,9 @@ button { font: inherit; color: inherit; }
 
 @media (max-width: 600px) {
   .card { grid-template-columns: 1fr; justify-items: start; }
-  .card .emblem { width: 96px; }
+  .card .emblem { width: min(46cqw, 24cqh); }
+  .leaf.xl { font-size: clamp(2.6rem, 13cqw, 4.2rem); }
+  .leaf.lg { font-size: clamp(2.2rem, 11.5cqw, 3.8rem); }
   .counter { display: none; }
 }
 
